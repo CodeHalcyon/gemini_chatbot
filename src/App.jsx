@@ -122,12 +122,12 @@ function App() {
                 li: ({ node, ...props }) => (
                   <li className="mb-0.5 sm:mb-1" {...props} />
                 ),
-                code({ node, inline, className, children, ...props }) {
+                code({ node, inline, children, ...props }) {
                   return !inline ? (
                     <SyntaxHighlighter
                       language="javascript"
                       PreTag="div"
-                      className="my-2 rounded-md sm:my-4"
+                      className="!mt-0 !p-1 bg-transparent w-min inline "
                       {...props}
                     >
                       {String(children).replace(/\n$/, "")}
