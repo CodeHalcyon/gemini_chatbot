@@ -12,8 +12,9 @@ function App() {
   const API_URL = import.meta.env.VITE_API_URL;
 
   // Fetch response from Gemini API
-  const genResponse = async () => {
+  const genResponse = async (event) => {
     setResponse("generating...");
+    event.preventDefault()  
     try {
       const answer = await axios({
         method: "post",
