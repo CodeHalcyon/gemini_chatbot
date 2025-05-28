@@ -3,6 +3,7 @@ import "./App.css";
 import ReactMarkdown from "react-markdown";
 import axios from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { ScaleLoader } from "react-spinners";
 
 function App() {
   const [input, setInput] = useState("");
@@ -13,8 +14,9 @@ function App() {
 
   // Fetch response from Gemini API
   const genResponse = async (event) => {
-    setResponse("generating...");
-    event.preventDefault()  
+    setResponse("generating");
+
+    event.preventDefault();
     try {
       const answer = await axios({
         method: "post",
@@ -75,47 +77,73 @@ function App() {
         </button>
 
         {/* Markdown response output */}
-        <div className="mt-6 sm:mt-8 p-4 sm:p-6 rounded-xl bg-zinc-800 text-zinc-100 font-sans overflow-y-auto h-[700px] sm:h-[500px] shadow-xl border border-zinc-700 leading-relaxed">
-          <ReactMarkdown
-            children={formatMarkdown(response)}
-            components={{
-              h1: ({ node, ...props }) => (
-                <h1 className="mt-4 mb-1 text-2xl font-bold sm:mt-6 sm:mb-2 sm:text-3xl" {...props} />
-              ),
-              h2: ({ node, ...props }) => (
-                <h2 className="mt-3 mb-1 text-xl font-semibold sm:mt-5 sm:mb-2 sm:text-2xl" {...props} />
-              ),
-              h3: ({ node, ...props }) => (
-                <h3 className="mt-2 mb-1 text-lg font-medium sm:mt-4 sm:mb-2 sm:text-xl" {...props} />
-              ),
-              p: ({ node, ...props }) => (
-                <p className="mb-2 leading-relaxed sm:mb-3" {...props} />
-              ),
-              ul: ({ node, ...props }) => (
-                <ul className="mb-2 ml-5 list-disc sm:mb-3 sm:ml-6" {...props} />
-              ),
-              ol: ({ node, ...props }) => (
-                <ol className="mb-2 ml-5 list-decimal sm:mb-3 sm:ml-6" {...props} />
-              ),
-              li: ({ node, ...props }) => <li className="mb-0.5 sm:mb-1" {...props} />,
-              code({ node, inline, className, children, ...props }) {
-                return !inline ? (
-                  <SyntaxHighlighter
-                    language="javascript"
-                    PreTag="div"
-                    className="my-2 rounded-md sm:my-4"
+        <div className="mt-6 sm:mt-8 p-4 sm:p-6 rounded-xl bg-zinc-800 text-zinc-100 text-xl font-sans overflow-y-auto h-[700px] sm:h-[500px] shadow-xl border border-zinc-700 leading-relaxed">
+          {response === "generating" ? (
+            <div className="flex justify-center">
+              <ScaleLoader  color="#1e3a8a" className="m-auto" />
+            </div>
+          ) : (
+            <ReactMarkdown
+              children={formatMarkdown(response)}
+              components={{
+                h1: ({ node, ...props }) => (
+                  <h1
+                    className="mt-4 mb-1 text-2xl font-bold sm:mt-6 sm:mb-2 sm:text-3xl"
                     {...props}
-                  >
-                    {String(children).replace(/\n$/, "")}
-                  </SyntaxHighlighter>
-                ) : (
-                  <code className="bg-gray-700 text-yellow-300 px-1 py-0.5 rounded" {...props}>
-                    {children}
-                  </code>
-                );
-              },
-            }}
-          />
+                  />
+                ),
+                h2: ({ node, ...props }) => (
+                  <h2
+                    className="mt-3 mb-1 text-xl font-semibold sm:mt-5 sm:mb-2 sm:text-2xl"
+                    {...props}
+                  />
+                ),
+                h3: ({ node, ...props }) => (
+                  <h3
+                    className="mt-2 mb-1 text-lg font-medium sm:mt-4 sm:mb-2 sm:text-xl"
+                    {...props}
+                  />
+                ),
+                p: ({ node, ...props }) => (
+                  <p className="mb-2 leading-relaxed sm:mb-3" {...props} />
+                ),
+                ul: ({ node, ...props }) => (
+                  <ul
+                    className="mb-2 ml-5 list-disc sm:mb-3 sm:ml-6"
+                    {...props}
+                  />
+                ),
+                ol: ({ node, ...props }) => (
+                  <ol
+                    className="mb-2 ml-5 list-decimal sm:mb-3 sm:ml-6"
+                    {...props}
+                  />
+                ),
+                li: ({ node, ...props }) => (
+                  <li className="mb-0.5 sm:mb-1" {...props} />
+                ),
+                code({ node, inline, className, children, ...props }) {
+                  return !inline ? (
+                    <SyntaxHighlighter
+                      language="javascript"
+                      PreTag="div"
+                      className="my-2 rounded-md sm:my-4"
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, "")}
+                    </SyntaxHighlighter>
+                  ) : (
+                    <code
+                      className="bg-gray-700 text-yellow-300 px-1 py-0.5 rounded"
+                      {...props}
+                    >
+                      {children}
+                    </code>
+                  );
+                },
+              }}
+            />
+          )}
         </div>
       </div>
     </div>
